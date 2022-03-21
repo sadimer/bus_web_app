@@ -1,5 +1,5 @@
 package util;
-import entities.Users;
+import entities.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
@@ -12,6 +12,12 @@ public class HibernateUtil {
             sessionFactory = new Configuration()
                     .configure()
                     .addAnnotatedClass(Users.class)
+                    .addAnnotatedClass(Stations.class)
+                    .addAnnotatedClass(Tickets.class)
+                    .addAnnotatedClass(Subroutes.class)
+                    .addAnnotatedClass(Routes.class)
+                    .addAnnotatedClass(Company.class)
+                    .addAnnotatedClass(StationsOfRoute.class)
                     .buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);

@@ -5,6 +5,10 @@ import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+
+@FilterDef(name = "nameFilter", parameters = @ParamDef(name = "nameParam", type = "java.lang.String"))
+@Filter(name = "nameFilter", condition = "route_name like :nameParam")
+
 @Getter
 @Setter
 @Builder
@@ -23,6 +27,6 @@ public class Routes {
     private String name;
 
     @ManyToOne(targetEntity = Company.class)
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Long company_id;
+    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
+    private Company company;
 }

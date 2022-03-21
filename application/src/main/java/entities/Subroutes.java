@@ -20,14 +20,14 @@ public class Subroutes {
     private Long id;
 
     @ManyToOne(targetEntity = Routes.class)
-    @JoinColumn(name = "route_id", referencedColumnName = "id")
-    private Long route_id;
+    @JoinColumn(name = "route_id", referencedColumnName = "route_id")
+    private Routes route;
 
     @OneToOne(targetEntity = Stations.class)
-    @JoinColumn(name = "arrival_st_id", referencedColumnName = "id")
-    private Long arrival_st_id;
+    @JoinColumn(name = "arrival_st_id", referencedColumnName = "st_id")
+    private Stations arrival_st;
 
     @OneToOne(targetEntity = Stations.class)
-    @JoinColumn(name = "depart_st_id", referencedColumnName = "id")
-    private Long depart_st_id;
+    @JoinColumn(name = "depart_st_id", referencedColumnName = "st_id")
+    private Stations depart_st;
 }

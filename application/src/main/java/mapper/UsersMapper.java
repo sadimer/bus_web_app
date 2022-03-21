@@ -28,6 +28,11 @@ public class UsersMapper {
         return mapper.map(dto, Users.class);
     }
 
+    public Users toUsers(UsersRsDTO dto) {
+        var mapper = new ModelMapper();
+        return mapper.map(dto, Users.class);
+    }
+
     public UsersRsDTO toDto(Users user) {
         var mapper = new ModelMapper();
         return mapper.map(user, UsersRsDTO.class);

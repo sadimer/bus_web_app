@@ -20,12 +20,12 @@ public class Tickets {
     private Long id;
 
     @ManyToOne(targetEntity = Users.class)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Long user_id;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private Users user;
 
     @ManyToOne(targetEntity = Subroutes.class)
-    @JoinColumn(name = "sub_id", referencedColumnName = "id")
-    private Long sub_id;
+    @JoinColumn(name = "sub_id", referencedColumnName = "sub_id")
+    private Subroutes sub;
 
     @Column(name = "seats")
     private Long seats;

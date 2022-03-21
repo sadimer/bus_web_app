@@ -22,19 +22,17 @@ public class StationsOfRoute {
     private Long id;
 
     @ManyToOne(targetEntity = Routes.class)
-    @JoinColumn(name = "route_id", referencedColumnName = "id")
-    private Long route_id;
+    @JoinColumn(name = "route_id", referencedColumnName = "route_id")
+    private Routes route;
 
     @ManyToOne(targetEntity = Stations.class)
-    @JoinColumn(name = "st_id", referencedColumnName = "id")
-    private Long st_id;
+    @JoinColumn(name = "st_id", referencedColumnName = "st_id")
+    private Stations st;
 
     @Column(name = "arrival_time")
-    @Temporal(value= TemporalType.TIMESTAMP)
     private LocalDateTime arrival;
 
     @Column(name = "dep_time")
-    @Temporal(value= TemporalType.TIMESTAMP)
     private LocalDateTime dep;
 
     @Column(name = "st_index")

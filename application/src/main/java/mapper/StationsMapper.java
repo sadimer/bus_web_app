@@ -13,6 +13,11 @@ public class StationsMapper {
         return mapper.map(dto, Stations.class);
     }
 
+    public Stations toStations(StationsRsDTO dto) {
+        var mapper = new ModelMapper();
+        return mapper.map(dto, Stations.class);
+    }
+
     public StationsRsDTO toDto(Stations station) {
         var mapper = new ModelMapper();
         return mapper.map(station, StationsRsDTO.class);
