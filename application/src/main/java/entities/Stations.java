@@ -5,6 +5,10 @@ import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@FilterDef(name = "nameCityFilter", parameters = {@ParamDef(name = "nameParam", type = "java.lang.String"),
+        @ParamDef(name = "cityParam", type = "java.lang.String")})
+@Filter(name = "nameCityFilter", condition = "st_name like :nameParam and city like :cityParam")
+
 @Getter
 @Setter
 @Builder

@@ -3,6 +3,7 @@ import DTO.UsersRqDTO;
 import DTO.UsersRqEmailPhoneDTO;
 import DTO.UsersRsDTO;
 import com.google.common.collect.Lists;
+import entities.Routes;
 import entities.Users;
 import mapper.UsersMapper;
 import org.junit.Assert;
@@ -51,12 +52,6 @@ class UsersDAOTest {
     @Test
     void updateUser() {
         Users old_entity = users.getEntityById(1L, Users.class);
-        // если таблица пустая то создаем пустую запись и обновляем ее
-        if (old_entity == null) {
-            UsersRqDTO dto = new UsersRqDTO("Андрей Андреевич Андреев", "12345", "Test", false);
-            old_entity = mapper.toUsers(dto);
-            Assert.assertTrue(users.create(old_entity));
-        }
         UsersRsDTO dto = new UsersRsDTO(1L,"Иван Иванович Иванов","test@mail.ru", "+7000000000", "12345", "Test", false);
         Users entity = mapper.toUsers(dto);
         Assert.assertNotNull(entity);
@@ -76,5 +71,17 @@ class UsersDAOTest {
     public void getAllUsers() {
         List<Users> all = users.getAll(Users.class);
         Assert.assertNotNull(all);
+    }
+
+    @Test
+    public void filterUsers() {
+        List<Users> result = users.filter(Map.of("nameFilter",
+                Lists.newArrayList("%Котова%")), Users.class);
+        Assert.assertEquals(result.size(), 1);
+        result.forEach(user -> Assert.assertTrue(user.getName().contains("Котова")));
+        result = users.filter(Map.of("loginFilter",
+                Lists.newArrayList("join4")), Users.class);
+        Assert.assertEquals(result.size(), 1);
+        result.forEach(user -> Assert.assertTrue(user.getLogin().contains("join4")));
     }
 }

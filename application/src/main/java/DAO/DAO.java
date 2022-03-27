@@ -89,6 +89,11 @@ public interface DAO<E, K> {
         return result;
     }
 
+    default List<E> findAllBy(Class persistentClass, Class searchClass) {
+        // TODO
+        return null;
+    }
+
     default List<E> sort(Map<String, String> order, Class persistentClass) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(persistentClass, "CRITERIA");

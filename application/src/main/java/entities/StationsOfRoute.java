@@ -7,6 +7,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
+
+//чтоб выводить конечную и начальную станцию добавим фильтр по индексу
+@FilterDef(name = "indexFilter", parameters = @ParamDef(name = "indexParam", type = "java.lang.Long"))
+@Filter(name = "indexFilter", condition = "st_index = :indexParam")
+
+@FilterDef(name = "arrivalFilter", parameters = {@ParamDef(name = "minDate", type = "java.time.LocalDateTime"),
+        @ParamDef(name = "maxDate", type = "java.time.LocalDateTime")})
+@Filter(name = "arrivalFilter",condition = "arrival_time >= :minDate and arrival_time <= :maxDate")
+
+@FilterDef(name = "departFilter", parameters = {@ParamDef(name = "minDate", type = "java.time.LocalDateTime"),
+        @ParamDef(name = "maxDate", type = "java.time.LocalDateTime")})
+@Filter(name = "departFilter",condition = "depart_time >= :minDate and depart_time <= :maxDate")
+
 @Getter
 @Setter
 @Builder
@@ -32,7 +45,7 @@ public class StationsOfRoute {
     @Column(name = "arrival_time")
     private LocalDateTime arrival;
 
-    @Column(name = "dep_time")
+    @Column(name = "depart_time")
     private LocalDateTime dep;
 
     @Column(name = "st_index")

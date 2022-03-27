@@ -2,6 +2,7 @@ package DAO;
 import DTO.StationsRqDTO;
 import DTO.StationsRsDTO;
 import com.google.common.collect.Lists;
+import entities.Routes;
 import entities.Stations;
 import mapper.StationsMapper;
 import org.junit.Assert;
@@ -47,12 +48,6 @@ class StationsDAOTest {
     @Test
     void updateStat() {
         Stations old_entity = stations.getEntityById(1L, Stations.class);
-        // если таблица пустая то создаем пустую запись и обновляем ее
-        if (old_entity == null) {
-            StationsRqDTO dto = new StationsRqDTO("Университет", "Москва");
-            old_entity = mapper.toStations(dto);
-            Assert.assertTrue(stations.create(old_entity));
-        }
         StationsRsDTO dto = new StationsRsDTO(1L,"Парк культуры и отдыха","Пенза");
         Stations entity = mapper.toStations(dto);
         Assert.assertNotNull(entity);
@@ -69,5 +64,14 @@ class StationsDAOTest {
     public void getAllStats() {
         List<Stations> all = stations.getAll(Stations.class);
         Assert.assertNotNull(all);
+    }
+
+    @Test
+    public void filterStats() {
+        List<Stations> result = stations.filter(Map.of("nameCityFilter",
+                Lists.newArrayList("Парк", "Москва")), Stations.class);
+        Assert.assertEquals(result.size(), 1);
+        result.forEach(stat -> Assert.assertTrue(stat.getName().contains("Парк")));
+        result.forEach(stat -> Assert.assertTrue(stat.getCity().contains("Москва")));
     }
 }

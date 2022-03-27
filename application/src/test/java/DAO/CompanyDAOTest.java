@@ -3,6 +3,7 @@ import DTO.CompanyRqDTO;
 import DTO.CompanyRsDTO;
 import com.google.common.collect.Lists;
 import entities.Company;
+import entities.Routes;
 import mapper.CompanyMapper;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -46,12 +47,6 @@ class CompanyDAOTest {
     @Test
     void updateComp() {
         Company old_entity = company.getEntityById(1L, Company.class);
-        // если таблица пустая то создаем пустую запись и обновляем ее
-        if (old_entity == null) {
-            CompanyRqDTO dto = new CompanyRqDTO("Перевозчик номер 1");
-            old_entity = mapper.toCompany(dto);
-            Assert.assertTrue(company.create(old_entity));
-        }
         CompanyRsDTO dto = new CompanyRsDTO(1L,"Рога и копыта");
         Company entity = mapper.toCompany(dto);
         Assert.assertNotNull(entity);
@@ -67,6 +62,14 @@ class CompanyDAOTest {
     public void getAllComps() {
         List<Company> all = company.getAll(Company.class);
         Assert.assertNotNull(all);
+    }
+
+    @Test
+    public void filterComps() {
+        List<Company> result = company.filter(Map.of("nameFilter",
+                Lists.newArrayList("ЦЭНКИ")), Company.class);
+        Assert.assertEquals(result.size(), 1);
+        result.forEach(comp -> Assert.assertTrue(comp.getName().contains("ЦЭНКИ")));
     }
 }
 

@@ -25,13 +25,8 @@ public class RoutesDAOTest {
     @Test
     void createRout() {
         Company comp = company.getEntityById(1L, Company.class);
-        if (comp == null) {
-            CompanyRqDTO dto = new CompanyRqDTO("Перевозчик номер 1");
-            comp = comp_mapper.toCompany(dto);
-            Assert.assertTrue(company.create(comp));
-        }
         CompanyRsDTO comp_dto = comp_mapper.toDto(comp);
-        RoutesRqDTO dto = new RoutesRqDTO("9К", comp_dto);
+        RoutesRqDTO dto = new RoutesRqDTO("9K", comp_dto);
         Routes entity = mapper.toRoutes(dto);
         Assert.assertNotNull(entity);
         // проверка создания
@@ -40,7 +35,7 @@ public class RoutesDAOTest {
         id = check_dto.getId();
         // проверка атрибутов
         Assert.assertNotNull(id);
-        Assert.assertEquals(check_dto.getName(), "9К");
+        Assert.assertEquals(check_dto.getName(), "9K");
         Assert.assertEquals(check_dto.getCompany().getId(), Long.valueOf(1L));
     }
 
@@ -64,9 +59,9 @@ public class RoutesDAOTest {
 
     @Test
     public void filterRouts() {
-        this.createRout();
         List<Routes> result = routes.filter(Map.of("nameFilter",
-                Lists.newArrayList("%K9%")), Routes.class);
-        result.forEach(route -> Assert.assertTrue(route.getName().contains("K9")));
+                Lists.newArrayList("9K")), Routes.class);
+        Assert.assertEquals(result.size(), 1);
+        result.forEach(route -> Assert.assertTrue(route.getName().contains("9K")));
     }
 }

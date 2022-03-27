@@ -5,6 +5,10 @@ import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+
+@FilterDef(name = "nameFilter", parameters = @ParamDef(name = "nameParam", type = "java.lang.String"))
+@Filter(name = "nameFilter", condition = "company_name like :nameParam")
+
 @Getter
 @Setter
 @Builder
