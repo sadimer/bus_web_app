@@ -1,10 +1,7 @@
 package DAO;
 import DTO.*;
 import com.google.common.collect.Lists;
-import entities.Company;
-import entities.Routes;
-import entities.StationsOfRoute;
-import entities.Stations;
+import entities.*;
 import mapper.*;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -75,6 +72,18 @@ public class StationsOfRouteDAOTest {
                 Lists.newArrayList(LocalDateTime.of(2022, 1, 1, 0, 0, 0), LocalDateTime.now())), StationsOfRoute.class);
         Assert.assertEquals(result.size(), 2);
         result.forEach(srt -> Assert.assertTrue(srt.getId() == 9 || srt.getId() == 10));
+    }
+
+    @Test
+    public void getByJoinStrt() {
+        Routes rout = route.getEntityById(2L, Routes.class);
+        List<StationsOfRoute> ticks = strt.getByJoin(rout);
+        Assert.assertEquals(ticks.size(), 4);
+        ticks.forEach(srt -> Assert.assertEquals(srt.getRoute().getId(), Long.valueOf(2L)));
+        Stations station = stat.getEntityById(1L, Stations.class);
+        ticks = strt.getByJoin(station);
+        Assert.assertEquals(ticks.size(), 2);
+        ticks.forEach(srt -> Assert.assertEquals(srt.getSt().getId(), Long.valueOf(1L)));
     }
 }
 

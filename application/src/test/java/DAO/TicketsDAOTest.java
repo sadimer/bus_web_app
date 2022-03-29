@@ -62,4 +62,12 @@ class TicketsDAOTest {
         List<Tickets> all = tickets.getAll(Tickets.class);
         Assert.assertNotNull(all);
     }
+
+    @Test
+    public void getByJoinTick() {
+        Users usr = user.getEntityById(1L, Users.class);
+        List<Tickets> ticks = tickets.getByJoin(usr);
+        Assert.assertEquals(ticks.size(), 2);
+        ticks.forEach(tck -> Assert.assertEquals(tck.getUser().getId(), Long.valueOf(1L)));
+    }
 }

@@ -1,10 +1,7 @@
 package DAO;
 import DTO.*;
 import com.google.common.collect.Lists;
-import entities.Company;
-import entities.Routes;
-import entities.Subroutes;
-import entities.Stations;
+import entities.*;
 import mapper.*;
 import mapper.SubroutesMapper;
 import org.junit.Assert;
@@ -62,5 +59,17 @@ public class SubroutesDAOTest {
     public void getAllSubrs() {
         List<Subroutes> all = subroutes.getAll(Subroutes.class);
         Assert.assertNotNull(all);
+    }
+
+    @Test
+    public void getByJoinSubr() {
+        Routes rout = route.getEntityById(1L, Routes.class);
+        List<Subroutes> ticks = subroutes.getByJoin(rout);
+        Assert.assertEquals(ticks.size(), 1);
+        ticks.forEach(srt -> Assert.assertEquals(srt.getRoute().getId(), Long.valueOf(1L)));
+        Stations station = stat.getEntityById(5L, Stations.class);
+        ticks = subroutes.getByJoin(station);
+        Assert.assertEquals(ticks.size(), 3);
+        ticks.forEach(srt -> Assert.assertEquals(srt.getDepart_st().getId(), Long.valueOf(5L)));
     }
 }

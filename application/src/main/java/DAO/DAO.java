@@ -1,10 +1,11 @@
 package DAO;
+import entities.Tickets;
+import entities.Users;
 import org.hibernate.Criteria;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
-import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public interface DAO<E, K> {
     default E update(E entity) {
@@ -87,11 +89,6 @@ public interface DAO<E, K> {
         List<E> result = query.list();
         session.close();
         return result;
-    }
-
-    default List<E> findAllBy(Class persistentClass, Class searchClass) {
-        // TODO
-        return null;
     }
 
     default List<E> sort(Map<String, String> order, Class persistentClass) {
