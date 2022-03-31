@@ -68,8 +68,12 @@ public class SubroutesDAOTest {
         Assert.assertEquals(ticks.size(), 1);
         ticks.forEach(srt -> Assert.assertEquals(srt.getRoute().getId(), Long.valueOf(1L)));
         Stations station = stat.getEntityById(5L, Stations.class);
-        ticks = subroutes.getByJoin(station);
+        ticks = subroutes.getByJoinDep(station);
         Assert.assertEquals(ticks.size(), 3);
         ticks.forEach(srt -> Assert.assertEquals(srt.getDepart_st().getId(), Long.valueOf(5L)));
+        station = stat.getEntityById(1L, Stations.class);
+        ticks = subroutes.getByJoinArr(station);
+        Assert.assertEquals(ticks.size(), 5);
+        ticks.forEach(srt -> Assert.assertEquals(srt.getArrival_st().getId(), Long.valueOf(1L)));
     }
 }

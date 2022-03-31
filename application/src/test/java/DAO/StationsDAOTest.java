@@ -2,9 +2,9 @@ package DAO;
 import DTO.StationsRqDTO;
 import DTO.StationsRsDTO;
 import com.google.common.collect.Lists;
-import entities.Routes;
-import entities.Stations;
+import entities.*;
 import mapper.StationsMapper;
+import mapper.StationsOfRouteMapper;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,9 @@ import java.util.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class StationsDAOTest {
     private StationsDAO stations = new StationsDAO();
+    private StationsOfRouteDAO strt = new StationsOfRouteDAO();
     StationsMapper mapper = new StationsMapper();
+    StationsOfRouteMapper strt_mapper = new StationsOfRouteMapper();
     private static Long id;
 
     @Test
@@ -73,5 +75,13 @@ class StationsDAOTest {
         Assert.assertEquals(result.size(), 1);
         result.forEach(stat -> Assert.assertTrue(stat.getName().contains("Парк")));
         result.forEach(stat -> Assert.assertTrue(stat.getCity().contains("Москва")));
+    }
+
+    @Test
+    public void getByJoinStat() {
+        StationsOfRoute srt = strt.getEntityById(1L, StationsOfRoute.class);
+        List<Stations> stat = stations.getByJoin(srt);
+        Assert.assertEquals(stat.size(), 1);
+        stat.forEach(st -> Assert.assertEquals(st.getId(), Long.valueOf(1L)));
     }
 }
