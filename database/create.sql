@@ -13,7 +13,7 @@ CREATE TABLE "users" (
     user_phone TEXT,
     user_passwd TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
-    user_login TEXT NOT NULL
+    user_login TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE "company" (

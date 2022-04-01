@@ -69,5 +69,9 @@ class TicketsDAOTest {
         List<Tickets> ticks = tickets.getByJoin(usr);
         Assert.assertEquals(ticks.size(), 2);
         ticks.forEach(tck -> Assert.assertEquals(tck.getUser().getId(), Long.valueOf(1L)));
+        Subroutes sub = subroute.getEntityById(1L, Subroutes.class);
+        ticks = tickets.getByJoin(sub);
+        Assert.assertEquals(ticks.size(), 1);
+        ticks.forEach(tck -> Assert.assertEquals(tck.getSub().getId(), Long.valueOf(1L)));
     }
 }

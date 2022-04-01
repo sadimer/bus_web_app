@@ -64,16 +64,16 @@ public class SubroutesDAOTest {
     @Test
     public void getByJoinSubr() {
         Routes rout = route.getEntityById(1L, Routes.class);
-        List<Subroutes> ticks = subroutes.getByJoin(rout);
-        Assert.assertEquals(ticks.size(), 1);
-        ticks.forEach(srt -> Assert.assertEquals(srt.getRoute().getId(), Long.valueOf(1L)));
+        List<Subroutes> srt = subroutes.getByJoin(rout);
+        Assert.assertEquals(srt.size(), 1);
+        srt.forEach(srtr -> Assert.assertEquals(srtr.getRoute().getId(), Long.valueOf(1L)));
         Stations station = stat.getEntityById(5L, Stations.class);
-        ticks = subroutes.getByJoinDep(station);
-        Assert.assertEquals(ticks.size(), 3);
-        ticks.forEach(srt -> Assert.assertEquals(srt.getDepart_st().getId(), Long.valueOf(5L)));
+        srt = subroutes.getByJoinDep(station);
+        Assert.assertEquals(srt.size(), 3);
+        srt.forEach(srtr -> Assert.assertEquals(srtr.getDepart_st().getId(), Long.valueOf(5L)));
         station = stat.getEntityById(1L, Stations.class);
-        ticks = subroutes.getByJoinArr(station);
-        Assert.assertEquals(ticks.size(), 5);
-        ticks.forEach(srt -> Assert.assertEquals(srt.getArrival_st().getId(), Long.valueOf(1L)));
+        srt = subroutes.getByJoinArr(station);
+        Assert.assertEquals(srt.size(), 5);
+        srt.forEach(srtr -> Assert.assertEquals(srtr.getArrival_st().getId(), Long.valueOf(1L)));
     }
 }

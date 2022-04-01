@@ -77,7 +77,7 @@ public class StationsOfRouteDAOTest {
     @Test
     public void getByJoinStrt() {
         Routes rout = route.getEntityById(2L, Routes.class);
-        List<StationsOfRoute> ticks = strt.getByJoin(rout);
+            List<StationsOfRoute> ticks = strt.getByJoin(rout);
         Assert.assertEquals(ticks.size(), 4);
         ticks.forEach(srt -> Assert.assertEquals(srt.getRoute().getId(), Long.valueOf(2L)));
         Stations station = stat.getEntityById(1L, Stations.class);
