@@ -90,17 +90,4 @@ public interface DAO<E, K> {
         session.close();
         return result;
     }
-
-    default List<E> sort(Map<String, String> order, Class persistentClass) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(persistentClass, "CRITERIA");
-        order.forEach((key, value) -> {
-            if (value.equals("asc")) {
-                criteria.addOrder(Order.asc(key));
-            } else if (value.equals("desc")) {
-                criteria.addOrder(Order.desc(key));
-            }
-        });
-        return criteria.list();
-    }
 }
