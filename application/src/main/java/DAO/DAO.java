@@ -1,20 +1,15 @@
 package DAO;
-import entities.Tickets;
-import entities.Users;
-import org.hibernate.Criteria;
+import util.HibernateUtil;
 import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.query.Query;
-import util.HibernateUtil;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public interface DAO<E, K> {
     default E update(E entity) {

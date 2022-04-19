@@ -1,9 +1,9 @@
 package mapper;
 
+import DTO.StationsOfRouteRqDTO;
+import DTO.StationsOfRouteRsDTO;
+import entities.StationsOfRoute;
 import org.modelmapper.ModelMapper;
-import DTO.*;
-import entities.*;
-import java.util.*;
 
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;

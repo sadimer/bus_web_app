@@ -1,9 +1,9 @@
 package mapper;
 
+import DTO.TicketsRqDTO;
+import DTO.TicketsRsDTO;
+import entities.Tickets;
 import org.modelmapper.ModelMapper;
-import DTO.*;
-import entities.*;
-import java.util.*;
 
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;

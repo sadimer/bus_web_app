@@ -1,0 +1,7 @@
+
+#map {
+    position: absolute;
+    width: 1300px;
+    height: 1390px;
+    background: url("bus.png") bottom left / contain no-repeat;
+}

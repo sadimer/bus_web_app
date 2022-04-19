@@ -1,9 +1,10 @@
 package mapper;
 
+import DTO.CompanyRqDTO;
+import DTO.CompanyRsDTO;
+import entities.Company;
 import org.modelmapper.ModelMapper;
 import DTO.*;
-import entities.*;
-import java.util.*;
 import org.springframework.stereotype.Component;
 
 @Component

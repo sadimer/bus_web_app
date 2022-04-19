@@ -4,8 +4,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
 
 //чтоб выводить конечную и начальную станцию добавим фильтр по индексу

@@ -2,9 +2,9 @@ package DAO;
 import entities.Subroutes;
 import entities.Tickets;
 import entities.Users;
+import util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;

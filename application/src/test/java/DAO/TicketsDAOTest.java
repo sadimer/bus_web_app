@@ -1,6 +1,8 @@
 package DAO;
-import DTO.*;
-import com.google.common.collect.Lists;
+import DTO.SubroutesRsDTO;
+import DTO.TicketsRqDTO;
+import DTO.TicketsRsDTO;
+import DTO.UsersRsDTO;
 import entities.Subroutes;
 import entities.Tickets;
 import entities.Users;

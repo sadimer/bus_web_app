@@ -1,9 +1,7 @@
 package DAO;
 import DTO.UsersRqDTO;
-import DTO.UsersRqEmailPhoneDTO;
 import DTO.UsersRsDTO;
 import com.google.common.collect.Lists;
-import entities.Routes;
 import entities.Users;
 import mapper.UsersMapper;
 import org.junit.Assert;

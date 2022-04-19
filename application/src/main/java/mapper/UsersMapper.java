@@ -1,9 +1,8 @@
 package mapper;
 
+import entities.Users;
 import org.modelmapper.ModelMapper;
 import DTO.*;
-import entities.*;
-import java.util.*;
 import org.springframework.stereotype.Component;
 
 @Component

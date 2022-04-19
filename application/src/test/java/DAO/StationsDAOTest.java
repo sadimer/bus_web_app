@@ -1,8 +1,9 @@
 package DAO;
 import DTO.StationsRqDTO;
 import DTO.StationsRsDTO;
+import entities.Stations;
+import entities.StationsOfRoute;
 import com.google.common.collect.Lists;
-import entities.*;
 import mapper.StationsMapper;
 import mapper.StationsOfRouteMapper;
 import org.junit.Assert;

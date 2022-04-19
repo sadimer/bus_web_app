@@ -1,7 +1,6 @@
 package entities;
 import lombok.*;
 import javax.persistence.*;
-import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
