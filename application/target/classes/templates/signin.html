@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html>
+<head>
+    <title> Вход и регистрация </title>
+</head>
+<body>
+<div>
+<form action="/signin" method="post">
+    <input id="user_login" required type="text" name="user_login" placeholder="Login">
+    <input id="user_psw" required type="text" name="user_psw" placeholder="Password">
+    <input type="submit" value="Войти" id="enter_submit">
+</form>
+<form action="/register" method="post">
+    <input id="new_login" required type="text" name="user_login" placeholder="Login">
+    <input id="new_psw" required type="text" name="user_psw" placeholder="Password">
+    <input id="new_name" required type="text" name="user_name" placeholder="ФИО">
+    <input id="new_phone" type="text" name="user_phone" placeholder="Телефон">
+    <input id="new_email" type="text" name="user_email" placeholder="Email">
+    <input type="submit" value="Зарегистрироваться" id="register_submit">
+</form>
+<form action="/home" method="get">
+    <input type="submit" value="Домой" id="home_submit">
+</form>
+</div>
+<div th:if="${error != null}">
+    <p th:text="${error}"> </p>
+</div>
+<div th:if="${error == null and user_login != null} ">
+    <p th:text="'Welcome, '  + ${user_login} + '!'"></p>
+</div>
+</body>
+</html>
