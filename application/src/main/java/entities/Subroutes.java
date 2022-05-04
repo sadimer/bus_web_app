@@ -29,4 +29,10 @@ public class Subroutes {
     @OneToOne(targetEntity = Stations.class)
     @JoinColumn(name = "depart_st_id", referencedColumnName = "st_id")
     private Stations depart_st;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Subroutes other = (Subroutes) obj;
+        return this.id == other.id;
+    }
 }

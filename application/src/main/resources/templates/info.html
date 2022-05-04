@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о рейсе</title>
+</head>
+<body>
+<p><b>Информация о маршруте:</b></p>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id маршрута</th>
+        <th scope="col">Маршрут</th>
+        <th scope="col">Перевозчик</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="route : ${routes}" th:object="${route}">
+        <td th:text="*{getRoute().getId()}"></td>
+        <td th:text="*{getRoute().getName()}"></td>
+        <td th:text="*{getRoute().getCompany().getName()}"></td>
+    </tr>
+    </tbody>
+</table>
+<p><b>Информация о станции отправления:</b></p>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id станции</th>
+        <th scope="col">Название</th>
+        <th scope="col">Город</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="route : ${routes}" th:object="${route}">
+        <td th:text="*{getDepart_st().getId()}"></td>
+        <td th:text="*{getDepart_st().getName()}"></td>
+        <td th:text="*{getDepart_st().getCity()}"></td>
+    </tr>
+    </tbody>
+</table>
+<p><b>Информация о станции прибытия:</b></p>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Id станции</th>
+        <th scope="col">Название</th>
+        <th scope="col">Город</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="route : ${routes}" th:object="${route}">
+        <td th:text="*{getArrival_st().getId()}"></td>
+        <td th:text="*{getArrival_st().getName()}"></td>
+        <td th:text="*{getArrival_st().getCity()}"></td>
+    </tr>
+    </tbody>
+</table>
+<p><b>Информация об остальных станциях:</b></p>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">№</th>
+        <th scope="col">Id станции</th>
+        <th scope="col">Название</th>
+        <th scope="col">Город</th>
+        <th scope="col">Время прибытия</th>
+        <th scope="col">Время отправления</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="station : ${stations}" th:object="${station}">
+        <td th:text="*{getSt_index()}"></td>
+        <td th:text="*{getSt().getId()}"></td>
+        <td th:text="*{getSt().getName()}"></td>
+        <td th:text="*{getSt().getCity()}"></td>
+        <td th:text="*{getArrival()}"></td>
+        <td th:text="*{getDep()}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${error != null}">
+    <p th:text="${error}"> </p>
+</div>
+<form method="get" action="/order">
+    <input id="place" required type="number" placeholder="Номер места">
+    <button type="submit" class="btn btn-secondary"> Забронировать билет на данный рейс </button>
+</form>
+<p></p>
+<form action="/home" method="get">
+    <input type="submit" value="Домой" id="home_submit">
+</form>
+</body>
+</html>

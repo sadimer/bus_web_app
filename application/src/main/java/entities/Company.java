@@ -25,4 +25,10 @@ public class Company {
 
     @Column(name = "company_name")
     private String name;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Company other = (Company) obj;
+        return this.id == other.id;
+    }
 }

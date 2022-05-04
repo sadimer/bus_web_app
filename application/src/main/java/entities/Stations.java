@@ -28,4 +28,10 @@ public class Stations {
 
     @Column(name = "city")
     private String city;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Stations other = (Stations) obj;
+        return this.id == other.id;
+    }
 }

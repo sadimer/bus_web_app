@@ -48,4 +48,10 @@ public class StationsOfRoute {
 
     @Column(name = "st_index")
     private Long st_index;
+
+    @Override
+    public boolean equals(Object obj) {
+        final StationsOfRoute other = (StationsOfRoute) obj;
+        return this.id == other.id;
+    }
 }

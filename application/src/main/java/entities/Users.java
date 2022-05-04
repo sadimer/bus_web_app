@@ -42,4 +42,10 @@ public class Users {
 
     @Column(name = "user_login")
     private String login;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Users other = (Users) obj;
+        return this.id == other.id;
+    }
 }

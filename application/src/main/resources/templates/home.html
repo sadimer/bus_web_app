@@ -5,12 +5,26 @@
     <title> Домашняя страница </title>
 </head>
 <body>
-<h3> Найдите подходящий рейс! </h3>
+<h3> Желаете войти в аккаунт? </h3>
 <form action="/signin" method="get">
     <input type="submit" value="Войти" id="enter_submit">
-</form>
-<form action="/signin" method="get">
     <input type="submit" value="Зарегистрироваться" id="register_submit">
+</form>
+<h3> Найдите подходящий рейс: </h3>
+<form action="/trips" method="get">
+    <p><b>Время отправления (от и до):</b></p>
+    <input type="datetime-local" id="dep_time_min" name="dep_time_min">
+    <input type="datetime-local" id="dep_time_max" name="dep_time_max">
+    <p><b>Время прибытия (от и до):</b></p>
+    <input type="datetime-local" id="arr_time_min" name="arr_time_min">
+    <input type="datetime-local" id="arr_time_max" name="arr_time_max">
+    <p>
+        <input id="dep_city" type="text" name="dep_city" placeholder="Город отправления">
+        <input id="arr_city" type="text" name="arr_city" placeholder="Город прибытия">
+        <input id="dep_st" type="text" name="dep_st" placeholder="Станция отправления">
+        <input id="arr_st" type="text" name="arr_st" placeholder="Станция прибытия">
+    <p>
+    <button type="submit" class="btn btn-primary"> Найти! </button>
 </form>
 </body>
 </html>

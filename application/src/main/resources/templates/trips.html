@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список рейсов</title>
+</head>
+<body>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">№</th>
+        <th scope="col">Маршрут</th>
+        <th scope="col">Перевозчик</th>
+        <th scope="col">Станция отправления</th>
+        <th scope="col">Город станции отправления</th>
+        <th scope="col">Станция прибытия</th>
+        <th scope="col">Город станции прибытия</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="route : ${routes}" th:object="${route}">
+        <td th:text="*{getId()}"></td>
+        <td th:text="*{getRoute().getName()}"></td>
+        <td th:text="*{getRoute().getCompany().getName()}"></td>
+        <td th:text="*{getDepart_st().getName()}"></td>
+        <td th:text="*{getDepart_st().getCity()}"></td>
+        <td th:text="*{getArrival_st().getName()}"></td>
+        <td th:text="*{getArrival_st().getCity()}"></td>
+        <td>
+            <form method="get" action="/info">
+                <input type="hidden" name="id" th:value="*{getId()}"/>
+                <button type="submit" class="btn btn-secondary"> Информация </button>
+            </form>
+        </td>
+        <td>
+            <form method="get" action="/order">
+                <input id="place" required type="number" placeholder="Номер места">
+                <button type="submit" class="btn btn-secondary"> Забронировать </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${error != null}">
+    <p th:text="${error}"> </p>
+</div>
+<form action="/home" method="get">
+    <input type="submit" value="Домой" id="home_submit">
+</form>
+</body>
+</html>

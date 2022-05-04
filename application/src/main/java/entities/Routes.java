@@ -29,4 +29,10 @@ public class Routes {
     @ManyToOne(targetEntity = Company.class)
     @JoinColumn(name = "company_id", referencedColumnName = "company_id")
     private Company company;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Routes other = (Routes) obj;
+        return this.id == other.id;
+    }
 }

@@ -31,4 +31,10 @@ public class Tickets {
 
     @Column(name = "price_rub")
     private Double price;
+
+    @Override
+    public boolean equals(Object obj) {
+        final Tickets other = (Tickets) obj;
+        return this.id == other.id;
+    }
 }
