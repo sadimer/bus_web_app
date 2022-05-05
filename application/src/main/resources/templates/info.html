@@ -84,11 +84,14 @@
     <p th:text="${error}"> </p>
 </div>
 <form method="get" action="/order">
-    <input id="place" required type="number" placeholder="Номер места">
+    <input type="hidden" name="id" th:value="${id}"/>
+    <input id="place" name="place" required type="number" placeholder="Номер места">
+    <input type="hidden" name="user_id" th:value="${user_id}">
     <button type="submit" class="btn btn-secondary"> Забронировать билет на данный рейс </button>
 </form>
 <p></p>
 <form action="/home" method="get">
+    <input type="hidden" name="user_id" th:value="${user_id}">
     <input type="submit" value="Домой" id="home_submit">
 </form>
 </body>

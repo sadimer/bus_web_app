@@ -32,12 +32,15 @@
         <td>
             <form method="get" action="/info">
                 <input type="hidden" name="id" th:value="*{getId()}"/>
+                <input type="hidden" name="user_id" th:value="${user_id}">
                 <button type="submit" class="btn btn-secondary"> Информация </button>
             </form>
         </td>
         <td>
             <form method="get" action="/order">
-                <input id="place" required type="number" placeholder="Номер места">
+                <input type="hidden" name="id" th:value="*{getId()}"/>
+                <input id="place" name="place" required type="number" placeholder="Номер места">
+                <input type="hidden" name="user_id" th:value="${user_id}">
                 <button type="submit" class="btn btn-secondary"> Забронировать </button>
             </form>
         </td>
@@ -48,6 +51,7 @@
     <p th:text="${error}"> </p>
 </div>
 <form action="/home" method="get">
+    <input type="hidden" name="user_id" th:value="${user_id}">
     <input type="submit" value="Домой" id="home_submit">
 </form>
 </body>

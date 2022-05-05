@@ -5,11 +5,29 @@
     <title> Домашняя страница </title>
 </head>
 <body>
-<h3> Желаете войти в аккаунт? </h3>
-<form action="/signin" method="get">
-    <input type="submit" value="Войти" id="enter_submit">
-    <input type="submit" value="Зарегистрироваться" id="register_submit">
-</form>
+<div th:if="${user_id == null}">
+    <h3> Желаете войти в аккаунт? </h3>
+    <form action="/signin" method="get">
+        <input type="submit" value="Войти" id="enter_submit">
+        <input type="submit" value="Зарегистрироваться" id="register_submit">
+    </form>
+</div>
+<div th:if="${user_id != null}">
+    <h3> Вы успешно авторизованы! </h3>
+    <form action="/home" method="get">
+        <input type="submit" value="Выйти?" id="home_submit">
+    </form>
+    <p></p>
+    <form action="/profile" method="get">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input type="submit" value="Личный кабинет" id="profile_submit">
+    </form>
+    <p></p>
+    <form action="/order" method="get">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input type="submit" value="Заказы" id="order_submit">
+    </form>
+</div>
 <h3> Найдите подходящий рейс: </h3>
 <form action="/trips" method="get">
     <p><b>Время отправления (от и до):</b></p>
@@ -24,6 +42,7 @@
         <input id="dep_st" type="text" name="dep_st" placeholder="Станция отправления">
         <input id="arr_st" type="text" name="arr_st" placeholder="Станция прибытия">
     <p>
+    <input type="hidden" name="user_id" th:value="${user_id}">
     <button type="submit" class="btn btn-primary"> Найти! </button>
 </form>
 </body>

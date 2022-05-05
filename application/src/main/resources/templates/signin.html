@@ -11,6 +11,7 @@
         <input id="user_psw" required type="text" name="user_psw" placeholder="Password">
         <input type="submit" value="Войти" id="enter_submit">
     </form>
+    <p></p>
     <form action="/register" method="post">
         <input id="new_login" required type="text" name="user_login" placeholder="Login">
         <input id="new_psw" required type="text" name="user_psw" placeholder="Password">
@@ -23,6 +24,7 @@
 <div>
     <p></p>
     <form action="/home" method="get">
+        <input type="hidden" name="user_id" th:value="${user_id}">
         <input type="submit" value="Домой" id="home_submit">
     </form>
 </div>

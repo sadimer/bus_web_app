@@ -5,7 +5,92 @@
     <title>Информация о пользователе</title>
 </head>
 <body>
+<div th:if="${user_id != null}">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Фамилия, имя, отчество</th>
+            <th scope="col">Логин</th>
+            <th scope="col">Пароль</th>
+            <th scope="col">Контактный email</th>
+            <th scope="col">Контактный телефон</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}" th:object="${user}">
+            <td th:text="*{getId()}"></td>
+            <td th:text="*{getName()}"></td>
+            <td th:text="*{getLogin()}"></td>
+            <td th:text="*{getPasswd()}"></td>
+            <td th:text="*{getEmail()}"></td>
+            <td th:text="*{getPhone()}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Фамилия, имя, отчество</th>
+            <th scope="col">Логин</th>
+            <th scope="col">Пароль</th>
+            <th scope="col">Контактный email</th>
+            <th scope="col">Контактный телефон</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}" th:object="${user}">
+            <td th:text="*{getId()}"></td>
+            <td>
+                <form method="post" action="/profile">
+                    <input id="name_ch" name="name" type="text" placeholder="Новые ФИО">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <button type="submit" class="btn btn-secondary"> Обновить! </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/profile">
+                    <input id="login_ch" name="login" type="text" placeholder="Новый логин">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <button type="submit" class="btn btn-secondary"> Обновить! </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/profile">
+                    <input id="passwd_ch" name="passwd" type="text" placeholder="Новый пароль">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <button type="submit" class="btn btn-secondary"> Обновить! </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/profile">
+                    <input id="email_ch" name="email" type="text" placeholder="Новый email">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <button type="submit" class="btn btn-secondary"> Обновить! </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/profile">
+                    <input id="phone_ch" name="phone" type="text" placeholder="Новый телефон">
+                    <input type="hidden" name="user_id" th:value="${user_id}">
+                    <button type="submit" class="btn btn-secondary"> Обновить! </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${user_id == null}">
+    <p><b> Пожалуйста авторизуйтесь! </b></p>
+    <form action="/signin" method="get">
+        <input type="submit" value="Войти" id="enter_submit">
+        <input type="submit" value="Зарегистрироваться" id="register_submit">
+    </form>
+    <p></p>
+</div>
 <form action="/home" method="get">
+    <input type="hidden" name="user_id" th:value="${user_id}">
     <input type="submit" value="Домой" id="home_submit">
 </form>
 </body>
