@@ -5,6 +5,47 @@
     <title>Список пассажиров рейса</title>
 </head>
 <body>
+<div th:if="${user_id != null and admin == true}">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Номер билета</th>
+            <th scope="col">Номер рейса</th>
+            <th scope="col">ФИО</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Email</th>
+            <th scope="col">Станция отправления</th>
+            <th scope="col">Станция прибытия</th>
+            <th scope="col">Место</th>
+            <th scope="col">Цена</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}" th:object="${ticket}">
+            <td th:text="*{getId()}"></td>
+            <td th:text="*{getSub().getRoute().getName()}"></td>
+            <td th:text="*{getUser().getName()}"></td>
+            <td th:text="*{getUser().getPhone()}"></td>
+            <td th:text="*{getUser().getEmail()}"></td>
+            <td th:text="*{getSub().getDepart_st().getName()}"></td>
+            <td th:text="*{getSub().getArrival_st().getName()}"></td>
+            <td th:text="*{getSeats()}"></td>
+            <td th:text="*{getPrice()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${user_id == null or admin == false or admin == null}">
+    <p><b> Пожалуйста авторизуйтесь! </b></p>
+    <form action="/signin" method="get">
+        <input type="submit" value="Войти" id="enter_submit">
+        <input type="submit" value="Зарегистрироваться" id="register_submit">
+    </form>
+    <p></p>
+</div>
+<div th:if="${error != null}">
+    <p th:text="${error}"> </p>
+</div>
 <form action="/home" method="get">
     <input type="hidden" name="user_id" th:value="${user_id}">
     <input type="submit" value="Домой" id="home_submit">

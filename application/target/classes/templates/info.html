@@ -17,7 +17,7 @@
     </thead>
     <tbody>
     <tr th:each="route : ${routes}" th:object="${route}">
-        <td th:text="*{getRoute().getId()}"></td>
+        <td th:text="*{getId()}"></td>
         <td th:text="*{getRoute().getName()}"></td>
         <td th:text="*{getRoute().getCompany().getName()}"></td>
     </tr>
@@ -89,6 +89,53 @@
     <input type="hidden" name="user_id" th:value="${user_id}">
     <button type="submit" class="btn btn-secondary"> Забронировать билет на данный рейс </button>
 </form>
+<p></p>
+<div th:if="${user_id != null and admin == true}">
+    <p><b> Изменить перевозчика: </b></p>
+    <form action="/info" method="post">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input id="company_name" name="company_name" type="text" placeholder="Создать новую компанию">
+        <input id="company_id" name="company_id" type="number" placeholder="Указать ID существующей компании">
+        <input type="submit" value="Изменить!" id="ch_comp">
+    </form>
+    <p><b> Изменить номер маршрута: </b></p>
+    <form action="/info" method="post">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input id="route_name" name="route_name" type="text" placeholder="Новый номер маршрута">
+        <input type="submit" value="Изменить!" id="ch_route">
+    </form>
+    <p><b> Создать новый маршрут: </b></p>
+    <form action="/info" method="post">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input id="route_nme" name="route_nme" type="text" placeholder="Номер нового маршрута">
+        <input type="submit" value="Создать!" id="nm_route">
+    </form>
+    <p><b> Удалить или добавить станцию: </b></p>
+    <form action="/info" method="post">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input id="st_index" name="st_index" type="number" placeholder="Номер станции">
+        <input type="submit" value="Удалить!" id="del">
+    </form>
+    <p></p>
+    <form action="/info" method="post">
+        <input type="hidden" name="user_id" th:value="${user_id}">
+        <input id="st_ind" name="st_ind" type="number" placeholder="Номер станции">
+        <input id="st_city" name="st_city" type="text" placeholder="Город новой станции">
+        <input id="st_name" name="st_name" type="text" placeholder="Название новой станции">
+        <input id="st_id" name="st_id" type="number" placeholder="ID cуществующей станции (не создавать новую)">
+        <input type="submit" value="Добавить!" id="add">
+        <p><b>Время отправления (от и до):</b></p>
+        <input type="datetime-local" id="dep_time_min" name="dep_time_min">
+        <input type="datetime-local" id="dep_time_max" name="dep_time_max">
+        <p><b>Время прибытия (от и до):</b></p>
+        <input type="datetime-local" id="arr_time_min" name="arr_time_min">
+        <input type="datetime-local" id="arr_time_max" name="arr_time_max">
+        <p><b> Особые указания: </b></p>
+        <input type="radio" name="st_type" value="depart"> Станция отправления
+        <input type="radio" name="st_type" value="arrival"> Станция прибытия
+        <input type="radio" name="st_type" value="other"> Промежуточная
+    </form>
+</div>
 <p></p>
 <form action="/home" method="get">
     <input type="hidden" name="user_id" th:value="${user_id}">

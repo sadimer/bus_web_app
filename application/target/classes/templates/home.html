@@ -23,10 +23,17 @@
         <input type="submit" value="Личный кабинет" id="profile_submit">
     </form>
     <p></p>
-    <form action="/order" method="get">
+    <form action="/story" method="get">
         <input type="hidden" name="user_id" th:value="${user_id}">
         <input type="submit" value="Заказы" id="order_submit">
     </form>
+    <p></p>
+    <div th:if="${admin == true}">
+        <form action="/admin" method="get">
+            <input type="hidden" name="user_id" th:value="${user_id}">
+            <input type="submit" value="Панель администратора" id="admin_submit">
+        </form>
+    </div>
 </div>
 <h3> Найдите подходящий рейс: </h3>
 <form action="/trips" method="get">

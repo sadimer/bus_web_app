@@ -89,6 +89,9 @@
     </form>
     <p></p>
 </div>
+<div th:if="${error != null}">
+    <p th:text="${error}"> </p>
+</div>
 <form action="/home" method="get">
     <input type="hidden" name="user_id" th:value="${user_id}">
     <input type="submit" value="Домой" id="home_submit">

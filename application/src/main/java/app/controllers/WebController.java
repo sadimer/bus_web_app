@@ -1,9 +1,13 @@
 package app.controllers;
 
 import DAO.*;
-import DTO.TicketsRqDTO;
+import DTO.*;
 import com.google.common.collect.Lists;
 import entities.*;
+import mapper.RoutesMapper;
+import mapper.StationsMapper;
+import mapper.SubroutesMapper;
+import mapper.UsersMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +25,15 @@ public class WebController {
     public ModelAndView home(@RequestParam(name = "user_id", required = false) Long user_id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home.html");
+        UsersDAO usr = new UsersDAO();
+        Users user = null;
+        Boolean admin = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            admin = user.getAdmin();
+        }
         modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("admin", admin);
         return modelAndView;
     }
 
@@ -98,18 +110,72 @@ public class WebController {
     public ModelAndView info(@RequestParam(name = "id", required = false) Long id,
                              @RequestParam(name = "user_id", required = false) Long user_id) {
         SubroutesDAO sub = new SubroutesDAO();
-        Subroutes res = sub.getEntityById(id, Subroutes.class);
+        Subroutes res = null;
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("info.html");
-        modelAndView.addObject("routes", res);
         StationsOfRouteDAO strt = new StationsOfRouteDAO();
-        List<StationsOfRoute> sr = strt.getByJoin(res.getRoute());
-        if (sr.size() == 0) {
-            modelAndView.addObject("error", "Not found!");
+        if (id == null) {
+            SubroutesMapper mapper = new SubroutesMapper();
+            StationsMapper stat_mapper = new StationsMapper();
+            RoutesMapper route_mapper = new RoutesMapper();
+            StationsDAO stat = new StationsDAO();
+            RoutesDAO route = new RoutesDAO();
+            Stations dep_st = stat.getEntityById(1L, Stations.class);
+            StationsRsDTO dep_st_dto = stat_mapper.toDto(dep_st);
+            Stations arr_st = stat.getEntityById(1L, Stations.class);
+            StationsRsDTO arr_st_dto = stat_mapper.toDto(arr_st);
+            Routes rout = route.getEntityById(1L, Routes.class);
+            RoutesRsDTO rout_dto = route_mapper.toDto(rout);
+            SubroutesRqDTO dto = new SubroutesRqDTO(rout_dto, arr_st_dto, dep_st_dto);
+            res = mapper.toSubroutes(dto);
+            sub.create(res);
+            List<StationsOfRoute> sr = strt.getByJoin(res.getRoute());
+            modelAndView.addObject("stations", sr);
+            modelAndView.addObject("error", "This station and route added for example! Please delete it later!");
+        } else {
+            res = sub.getEntityById(id, Subroutes.class);
+            List<StationsOfRoute> sr = strt.getByJoin(res.getRoute());
+            modelAndView.addObject("stations", sr);
+            if (sr.size() == 0) {
+                modelAndView.addObject("error", "Not found!");
+            }
         }
-        modelAndView.addObject("stations", sr);
+        modelAndView.addObject("routes", res);
+        UsersDAO usr = new UsersDAO();
+        Users user = null;
+        Boolean admin = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            admin = user.getAdmin();
+        }
         modelAndView.addObject("user_id", user_id);
         modelAndView.addObject("id", id);
+        modelAndView.addObject("admin", admin);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.POST)
+    public ModelAndView info_upd(@RequestParam(name = "id", required = false) Long id,
+                                 @RequestParam(name = "user_id", required = false) Long user_id,
+                                 @RequestParam(name = "company_name", required = false) String company_name,
+                                 @RequestParam(name = "company_id", required = false) Long company_id,
+                                 @RequestParam(name = "route_name", required = false) String route_name,
+                                 @RequestParam(name = "st_index", required = false) Long st_index,
+                                 @RequestParam(name = "st_ind", required = false) Long st_ind,
+                                 @RequestParam(name = "st_name", required = false) String st_name,
+                                 @RequestParam(name = "st_city", required = false) String st_city,
+                                 @RequestParam(name = "st_id", required = false) Long st_id,
+                                 @RequestParam(name = "arr_time_min", required = false)
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arr_time_min,
+                                 @RequestParam(name = "arr_time_max", required = false)
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arr_time_max,
+                                 @RequestParam(name = "dep_time_min", required = false)
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dep_time_min,
+                                 @RequestParam(name = "dep_time_max", required = false)
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dep_time_max) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("info.html");
+        modelAndView.addObject("user_id", user_id);
         return modelAndView;
     }
 
@@ -148,6 +214,8 @@ public class WebController {
             modelAndView.addObject("tickets", tick);
             modelAndView.addObject("arr", arr);
             modelAndView.addObject("dep", dep);
+        } else {
+            modelAndView.addObject("error", "Not found!");
         }
         modelAndView.addObject("user_id", user_id);
         return modelAndView;
@@ -160,6 +228,12 @@ public class WebController {
         Users user = null;
         if (user_id != null) {
             user = usr.getEntityById(user_id, Users.class);
+        } else {
+            modelAndView.addObject("error", "Not found!");
+        }
+        if (user == null) {
+            modelAndView.addObject("error", "Not found!");
+            user_id = null;
         }
         modelAndView.setViewName("profile.html");
         modelAndView.addObject("user_id", user_id);
@@ -195,6 +269,12 @@ public class WebController {
                 user.setPhone(phone);
             }
             usr.update(user);
+        } else {
+            modelAndView.addObject("error", "Not found!");
+        }
+        if (user == null) {
+            modelAndView.addObject("error", "Not found!");
+            user_id = null;
         }
         modelAndView.setViewName("profile.html");
         modelAndView.addObject("user_id", user_id);
@@ -206,23 +286,74 @@ public class WebController {
     public ModelAndView admin(@RequestParam(name = "user_id", required = false) Long user_id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin.html");
+        UsersDAO usr = new UsersDAO();
+        Users user = null;
+        Boolean admin = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            admin = user.getAdmin();
+        }
+        if (user == null) {
+            modelAndView.addObject("error", "Not found!");
+            user_id = null;
+        }
         modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("admin", admin);
         return modelAndView;
     }
 
     @RequestMapping(value = "/story", method = RequestMethod.GET)
     public ModelAndView story(@RequestParam(name = "user_id", required = false) Long user_id) {
         ModelAndView modelAndView = new ModelAndView();
+        TicketsDAO tick = new TicketsDAO();
+        UsersDAO usr = new UsersDAO();
+        Users user = null;
+        List<Tickets> tickets = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            tickets = tick.getByJoin(user);
+            if (tickets.size() == 0) {
+                modelAndView.addObject("error", "Not found!");
+            }
+        } else {
+            modelAndView.addObject("error", "Not found!");
+        }
+        if (user == null) {
+            modelAndView.addObject("error", "Not found!");
+            user_id = null;
+        }
         modelAndView.setViewName("story.html");
         modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("tickets", tickets);
         return modelAndView;
     }
 
     @RequestMapping(value = "/passengers", method = RequestMethod.GET)
-    public ModelAndView passengers(@RequestParam(name = "user_id", required = false) Long user_id) {
+    public ModelAndView passengers(@RequestParam(name = "user_id", required = false) Long user_id,
+                                   @RequestParam(name = "route_id", required = false) Long route_id) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("passengers.html");
+        UsersDAO usr = new UsersDAO();
+        SubroutesDAO sr = new SubroutesDAO();
+        TicketsDAO tc = new TicketsDAO();
+        List <Tickets> tickets = null;
+        Users user = null;
+        Boolean admin = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            admin = user.getAdmin();
+            tickets = tc.getByJoin(sr.getEntityById(route_id, Subroutes.class));
+            if (tickets.size() == 0) {
+                modelAndView.addObject("error", "Not found!");
+            }
+        }
+        if (user == null) {
+            modelAndView.addObject("error", "Not found!");
+            user_id = null;
+        }
         modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("admin", admin);
+        modelAndView.addObject("tickets", tickets);
         return modelAndView;
     }
 
@@ -259,6 +390,43 @@ public class WebController {
         modelAndView.setViewName("signin.html");
         modelAndView.addObject("user_login", user_login);
         modelAndView.addObject("user_id", result.get(0).getId());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView register(@RequestParam(name = "name", required = true) String name,
+                                 @RequestParam(name = "login", required = true) String login,
+                                 @RequestParam(name = "passwd", required = true) String passwd,
+                                 @RequestParam(name = "email", required = false) String email,
+                                 @RequestParam(name = "phone", required = false) String phone) {
+        ModelAndView modelAndView = new ModelAndView();
+        UsersMapper mapper = new UsersMapper();
+        UsersDAO users = new UsersDAO();
+        Users entity = null;
+        List<Users> result = users.filter(Map.of("loginFilter",
+                Lists.newArrayList(login)), Users.class);
+        if (result.size() > 0) {
+            modelAndView.setViewName("signin.html");
+            modelAndView.addObject("error", "User found! Please log in your account!");
+        } else {
+            if ((email == null || email == "") && (phone == null || phone == "")) {
+                UsersRqDTO dto1 = new UsersRqDTO(name, passwd, login, false);
+                entity = mapper.toUsers(dto1);
+            } else if (email == null || email == "") {
+                UsersRqPhoneDTO dto2 = new UsersRqPhoneDTO(name, phone, passwd, login, false);
+                entity = mapper.toUsers(dto2);
+            } else if (phone == null || phone == "") {
+                UsersRqEmailDTO dto3 = new UsersRqEmailDTO(name, email, passwd, login, false);
+                entity = mapper.toUsers(dto3);
+            } else {
+                UsersRqEmailPhoneDTO dto3 = new UsersRqEmailPhoneDTO(name, email, phone, passwd, login, false);
+                entity = mapper.toUsers(dto3);
+            }
+            modelAndView.addObject("user_login", entity.getLogin());
+            modelAndView.addObject("user_id", entity.getId());
+            users.create(entity);
+        }
+        modelAndView.setViewName("signin.html");
         return modelAndView;
     }
 }

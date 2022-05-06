@@ -5,54 +5,46 @@
     <title>Панель администратора</title>
 </head>
 <body>
-<div>
-    <form action="/story" method="get">
-        <input id="user_login_1" required type="text" name="user_login" placeholder="Login">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Показать историю пользователя" id="login_st">
+<div th:if="${user_id == null or admin == false or admin == null}">
+    <h3> Желаете войти в аккаунт? </h3>
+    <form action="/signin" method="get">
+        <input type="submit" value="Войти" id="enter_submit">
+        <input type="submit" value="Зарегистрироваться" id="register_submit">
     </form>
+    <p></p>
 </div>
-<div>
-    <form action="/passengers" method="get">
-        <input id="route_id_1" required type="text" name="route_id" placeholder="Route id">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Показать пассажиров рейса" id="route_ps_1">
-    </form>
-    <form action="/passengers" method="get">
-        <input id="route_id_2" required type="text" name="route_name" placeholder="Route name">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Показать пассажиров рейса" id="route_ps_2">
-    </form>
-</div>
-<div>
-    <form action="/profile" method="get">
-        <input id="user_login_2" required type="text" name="user_login" placeholder="Login">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Редактировать пользователя" id="login_ch">
-    </form>
-</div>
-<div>
-    <form action="/profile" method="get">
-        <input id="user_id" required type="text" name="user_id" placeholder="User id">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Редактировать пользователя" id="id_ch">
-    </form>
-</div>
-<div>
-    <form method="get" action="/info">
-        <input id="id" required type="text" name="id" placeholder="Route id">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Редактировать маршрут" id="id_rt">
-    </form>
-    <form method="get" action="/info">
-        <input id="name" required type="text" name="name" placeholder="Route name">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Редактировать маршрут" id="name_rt">
-    </form>
-    <form method="get" action="/info">
-        <input type="hidden" name="user_id" th:value="${user_id}">
-        <input type="submit" value="Создать новый маршрут" id="id_fc">
-    </form>
+<div th:if="${user_id != null and admin == true}">
+    <div>
+        <form action="/story" method="get">
+            <input id="user_id_1" required type="text" name="user_id" placeholder="User id">
+            <input type="submit" value="Войти в аккаунт пользователя и показать историю поездок" id="id_c">
+        </form>
+    </div>
+    <div>
+        <form action="/passengers" method="get">
+            <input id="route_id_1" required type="text" name="route_id" placeholder="Route id">
+            <input type="hidden" name="user_id" th:value="${user_id}">
+            <input type="submit" value="Показать пассажиров рейса" id="route_ps_1">
+        </form>
+    </div>
+    <div>
+        <form action="/profile" method="get">
+            <input id="user_id_2" required type="text" name="user_id" placeholder="User id">
+            <input type="submit" value="Войти в аккаунт пользователя и редактировать его данные" id="id_ch">
+        </form>
+    </div>
+    <div>
+        <form method="get" action="/info">
+            <input id="id" required type="text" name="id" placeholder="Route id">
+            <input type="hidden" name="user_id" th:value="${user_id}">
+            <input type="submit" value="Редактировать маршрут" id="id_rt">
+        </form>
+        <form method="get" action="/info">
+            <input type="hidden" name="user_id" th:value="${user_id}">
+            <input type="submit" value="Создать новый маршрут" id="id_fc">
+        </form>
+    </div>
+    <p></p>
 </div>
 <form action="/home" method="get">
     <input type="hidden" name="user_id" th:value="${user_id}">
