@@ -4,10 +4,7 @@ import DAO.*;
 import DTO.*;
 import com.google.common.collect.Lists;
 import entities.*;
-import mapper.RoutesMapper;
-import mapper.StationsMapper;
-import mapper.SubroutesMapper;
-import mapper.UsersMapper;
+import mapper.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,27 +152,112 @@ public class WebController {
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.POST)
-    public ModelAndView info_upd(@RequestParam(name = "id", required = false) Long id,
-                                 @RequestParam(name = "user_id", required = false) Long user_id,
+    public ModelAndView info_upd(@RequestParam(name = "id", required = true) Long id,
+                                 @RequestParam(name = "user_id", required = true) Long user_id,
                                  @RequestParam(name = "company_name", required = false) String company_name,
                                  @RequestParam(name = "company_id", required = false) Long company_id,
+                                 @RequestParam(name = "route_nme", required = false) String route_nme,
                                  @RequestParam(name = "route_name", required = false) String route_name,
+                                 @RequestParam(name = "route_id", required = false) Long route_id,
                                  @RequestParam(name = "st_index", required = false) Long st_index,
                                  @RequestParam(name = "st_ind", required = false) Long st_ind,
                                  @RequestParam(name = "st_name", required = false) String st_name,
                                  @RequestParam(name = "st_city", required = false) String st_city,
                                  @RequestParam(name = "st_id", required = false) Long st_id,
+                                 @RequestParam(name = "st_type", required = false) String st_type,
                                  @RequestParam(name = "arr_time_min", required = false)
                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arr_time_min,
-                                 @RequestParam(name = "arr_time_max", required = false)
-                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arr_time_max,
                                  @RequestParam(name = "dep_time_min", required = false)
-                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dep_time_min,
-                                 @RequestParam(name = "dep_time_max", required = false)
-                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dep_time_max) {
+                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dep_time_min) {
         ModelAndView modelAndView = new ModelAndView();
+        SubroutesDAO sub = new SubroutesDAO();
+        StationsOfRouteDAO strt = new StationsOfRouteDAO();
+        StationsDAO st = new StationsDAO();
+        RoutesDAO rout = new RoutesDAO();
+        Subroutes res = sub.getEntityById(id, Subroutes.class);
+        CompanyDAO comp = new CompanyDAO();
+        Company company = res.getRoute().getCompany();
+        if (company_id != null) {
+            company = comp.getEntityById(company_id, Company.class);
+        } else if (company_name != null && company_name != "") {
+            CompanyMapper mapper = new CompanyMapper();
+            CompanyRqDTO dto = new CompanyRqDTO(company_name);
+            company = mapper.toCompany(dto);
+            comp.create(company);
+        }
+        res.getRoute().setCompany(company);
+        rout.update(res.getRoute());
+        Routes route = res.getRoute();
+        if (route_nme != null && route_nme != "") {
+            RoutesMapper mapper = new RoutesMapper();
+            CompanyMapper comp_mapper = new CompanyMapper();
+            CompanyRsDTO comp_dto = comp_mapper.toDto(res.getRoute().getCompany());
+            RoutesRqDTO dto = new RoutesRqDTO(route_nme, comp_dto);
+            route = mapper.toRoutes(dto);
+            rout.create(route);
+        } else if (route_name != null && route_name != "") {
+            route.setName(route_name);
+            rout.update(route);
+        } else if (route_id != null) {
+            route = rout.getEntityById(route_id, Routes.class);
+        }
+        res.setRoute(route);
+        sub.update(res);
+        if (st_index != null) {
+            List <StationsOfRoute> lst = strt.getByJoin(route);
+            for (Iterator<StationsOfRoute> it = lst.iterator(); it.hasNext();) {
+                StationsOfRoute tmp = it.next();
+                if (tmp.getSt_index() == st_index) {
+                    strt.delete(tmp);
+                }
+            }
+        }
+        if (dep_time_min != null && arr_time_min != null && st_ind != null) {
+            Stations station = null;
+            if (st_id != null) {
+                station = st.getEntityById(st_id, Stations.class);
+            } else if (st_name != null && st_name != "" && st_city != null && st_city != "") {
+                StationsMapper mapper = new StationsMapper();
+                StationsRqDTO dto = new StationsRqDTO(st_name, st_city);
+                station = mapper.toStations(dto);
+                st.create(station);
+            }
+            if (station != null) {
+                StationsMapper stat_mapper = new StationsMapper();
+                RoutesMapper route_mapper = new RoutesMapper();
+                StationsOfRouteMapper mapper = new StationsOfRouteMapper();
+                StationsRsDTO st_dto = stat_mapper.toDto(station);
+                RoutesRsDTO rout_dto = route_mapper.toDto(route);
+                StationsOfRouteRqDTO dto = new StationsOfRouteRqDTO(rout_dto, st_dto, arr_time_min, dep_time_min, st_ind);
+                StationsOfRoute entity = mapper.toStationsOfRoute(dto);
+                strt.create(entity);
+                if (st_type.equals("depart")) {
+                    res.setDepart_st(station);
+                    sub.update(res);
+                }
+                if (st_type.equals("arrival")) {
+                    res.setArrival_st(station);
+                    sub.update(res);
+                }
+            }
+        }
+        UsersDAO usr = new UsersDAO();
+        Users user = null;
+        Boolean admin = null;
+        if (user_id != null) {
+            user = usr.getEntityById(user_id, Users.class);
+            admin = user.getAdmin();
+        }
         modelAndView.setViewName("info.html");
         modelAndView.addObject("user_id", user_id);
+        modelAndView.addObject("id", id);
+        modelAndView.addObject("admin", admin);
+        modelAndView.addObject("routes", res);
+        List<StationsOfRoute> sr = strt.getByJoin(res.getRoute());
+        modelAndView.addObject("stations", sr);
+        if (sr.size() == 0) {
+            modelAndView.addObject("error", "Not found!");
+        }
         return modelAndView;
     }
 
