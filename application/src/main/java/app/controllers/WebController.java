@@ -145,6 +145,9 @@ public class WebController {
             user = usr.getEntityById(user_id, Users.class);
             admin = user.getAdmin();
         }
+        if (id == null) {
+            id = res.getId();
+        }
         modelAndView.addObject("user_id", user_id);
         modelAndView.addObject("id", id);
         modelAndView.addObject("admin", admin);
@@ -231,11 +234,11 @@ public class WebController {
                 StationsOfRouteRqDTO dto = new StationsOfRouteRqDTO(rout_dto, st_dto, arr_time_min, dep_time_min, st_ind);
                 StationsOfRoute entity = mapper.toStationsOfRoute(dto);
                 strt.create(entity);
-                if (st_type.equals("depart")) {
+                if (st_type != null && st_type.equals("depart")) {
                     res.setDepart_st(station);
                     sub.update(res);
                 }
-                if (st_type.equals("arrival")) {
+                if (st_type != null && st_type.equals("arrival")) {
                     res.setArrival_st(station);
                     sub.update(res);
                 }
@@ -250,6 +253,9 @@ public class WebController {
         }
         modelAndView.setViewName("info.html");
         modelAndView.addObject("user_id", user_id);
+        if (id == null) {
+            id = res.getId();
+        }
         modelAndView.addObject("id", id);
         modelAndView.addObject("admin", admin);
         modelAndView.addObject("routes", res);
